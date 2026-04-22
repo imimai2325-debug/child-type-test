@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 아이 기관 유형 테스트</title>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF9F0;
+  --card: #FFFFFF;
+  --type1: #FF6B35;
+  --type2: #7B68EE;
+  --type3: #2ECC71;
+  --type4: #3498DB;
+  --text: #2D3436;
+  --sub: #636E72;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --radius: 20px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.deco-circle {
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0.08;
+  z-index: 0;
+  pointer-events: none;
+}
+.deco-circle.c1 { width: 300px; height: 300px; background: var(--type1); top: -80px; left: -80px; }
+.deco-circle.c2 { width: 200px; height: 200px; background: var(--type3); bottom: 10%; right: -60px; }
+.deco-circle.c3 { width: 250px; height: 250px; background: var(--type2); bottom: -100px; left: 30%; }
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  animation: fadeDown 0.6s ease;
+}
+.header .emoji-row { font-size: 40px; margin-bottom: 8px; }
+.header h1 {
+  font-family: 'Gaegu', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.header p {
+  font-size: 14px;
+  color: var(--sub);
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+/* ── Progress ── */
+.progress-wrap {
+  margin-bottom: 28px;
+  animation: fadeDown 0.6s ease 0.1s both;
+}
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--sub);
+  font-weight: 500;
+}
+.progress-bar {
+  height: 8px;
+  background: #E8E4DF;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--type1), var(--type4));
+  border-radius: 8px;
+  transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ── Question Card ── */
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  animation: slideUp 0.45s ease;
+}
+.q-number {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--type1), var(--type4));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.q-text {
+  font-family: 'Gaegu', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+.q-scene {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: #f8f6f3;
+  border-radius: 12px;
+  line-height: 1.6;
+}
+
+/* ── Options ── */
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #FAFAF8;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.option-btn:hover {
+  border-color: #ddd;
+  background: #F5F3EF;
+  transform: translateY(-1px);
+}
+.option-btn:active { transform: scale(0.98); }
+.option-btn .opt-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.option-btn.selected {
+  border-color: var(--type4);
+  background: #EBF5FF;
+}
+
+/* ── Result ── */
+.result-wrap {
+  animation: slideUp 0.5s ease;
+}
+.result-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.result-banner {
+  padding: 32px 24px 20px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+.result-banner .r-emoji { font-size: 56px; margin-bottom: 8px; }
+.result-banner h2 {
+  font-family: 'Gaegu', cursive;
+  font-size: 28px;
+  font-weight: 700;
+}
+.result-banner p {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+.result-body { padding: 24px; }
+.result-body h3 {
+  font-family: 'Gaegu', cursive;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.result-body p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--sub);
+  margin-bottom: 16px;
+}
+.rec-list {
+  list-style: none;
+  padding: 0;
+}
+.rec-list li {
+  padding: 10px 14px;
+  background: #f8f6f3;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.rec-list li .li-icon { flex-shrink: 0; }
+
+/* ── Score Bars ── */
+.score-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.score-section h3 {
+  font-family: 'Gaegu', cursive;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+.score-row {
+  margin-bottom: 14px;
+}
+.score-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.score-bar-bg {
+  height: 10px;
+  background: #EEE;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ── Buttons ── */
+/* ── Nav Bar ── */
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 2px solid #E0DBD5;
+  border-radius: 50px;
+  background: var(--card);
+  color: var(--sub);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.back-btn:hover { border-color: #bbb; color: var(--text); background: #f5f3ef; }
+.back-btn:active { transform: scale(0.96); }
+.back-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.back-btn .arrow { font-size: 16px; }
+.answered-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  margin: 0 2px;
+  transition: background 0.3s;
+}
+.answered-dot.filled { background: var(--type4); }
+.answered-dot.current { background: var(--type1); transform: scale(1.3); }
+
+.restart-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: var(--text);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.restart-btn:hover { opacity: 0.85; }
+.restart-btn:active { transform: scale(0.97); }
+
+/* ── Child name input ── */
+.name-input-wrap {
+  text-align: center;
+  animation: fadeDown 0.6s ease;
+}
+.name-input-wrap input {
+  font-family: 'Gaegu', cursive;
+  font-size: 24px;
+  text-align: center;
+  border: none;
+  border-bottom: 3px dashed #ccc;
+  background: transparent;
+  padding: 8px 16px;
+  outline: none;
+  color: var(--text);
+  width: 200px;
+  transition: border-color 0.3s;
+}
+.name-input-wrap input:focus { border-color: var(--type4); }
+.name-input-wrap input::placeholder { color: #ccc; }
+.start-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 48px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--type1), var(--type4));
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Gaegu', cursive;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(255,107,53,0.3);
+}
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,53,0.4); }
+.start-btn:active { transform: scale(0.96); }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.hidden { display: none !important; }
+
+.site-footer {
+  text-align: center;
+  padding: 24px 20px 16px;
+  font-size: 12px;
+  color: #aaa;
+  letter-spacing: 0.3px;
+}
+
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="deco-circle c1"></div>
+<div class="deco-circle c2"></div>
+<div class="deco-circle c3"></div>
+
+<div class="container">
+  <!-- Intro -->
+  <div id="intro">
+    <div class="header">
+      <div class="emoji-row">🧒🏻✨</div>
+      <h1>우리 아이에게 맞는<br>기관 유형 테스트</h1>
+      <p>12개 상황 질문으로 아이의 성향을 파악하고<br>어떤 기관이 잘 맞을지 알아보세요</p>
+    </div>
+    <div class="name-input-wrap">
+      <p style="font-size:15px; color:var(--sub); margin-bottom:12px;">아이 이름을 입력해주세요</p>
+      <input type="text" id="childName" placeholder="예: 소임" maxlength="10">
+      <br>
+      <button class="start-btn" id="startBtn" onclick="startTest()">테스트 시작하기 →</button>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div id="quiz" class="hidden">
+    <div class="nav-bar">
+      <button class="back-btn" id="backBtn" onclick="goBack()" disabled>
+        <span class="arrow">←</span> 이전 질문
+      </button>
+      <div id="dotIndicator"></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progressLabel">질문 1 / 12</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="question-card" id="questionCard"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="result" class="hidden"></div>
+</div>
+
+<footer class="site-footer">
+  © 2026 TwoIMs AI (투임즈AI). All rights reserved.
+</footer>
+
+<script>
+const questions = [
+  {
+    q: "새로운 놀이터에 갔을 때, 아이의 첫 반응은?",
+    scene: "🏞️ 처음 가본 놀이터에 도착한 상황",
+    opts: [
+      { emoji: "🏃", text: "바로 뛰어가서 이것저것 탐색한다", scores: [3,0,1,0] },
+      { emoji: "🤝", text: "엄마 손을 꼭 잡고 천천히 둘러본다", scores: [0,3,0,0] },
+      { emoji: "🌿", text: "나뭇잎이나 벌레 등 자연물에 먼저 관심을 보인다", scores: [0,0,3,0] },
+      { emoji: "🧐", text: "놀이기구 구조를 관찰하며 \"이건 어떻게 된 거야?\" 묻는다", scores: [1,0,0,3] }
+    ]
+  },
+  {
+    q: "친구가 아이의 장난감을 가져갔을 때 반응은?",
+    scene: "🧸 또래 친구와 놀다가 생긴 상황",
+    opts: [
+      { emoji: "💪", text: "\"내 거야!\" 하고 바로 되찾으려 한다", scores: [3,0,0,0] },
+      { emoji: "😢", text: "속상해서 울거나 엄마에게 온다", scores: [0,3,0,0] },
+      { emoji: "🔄", text: "다른 놀잇감을 찾아 스스로 해결한다", scores: [0,0,2,2] },
+      { emoji: "🗣️", text: "\"같이 놀자\" 또는 규칙을 제안한다", scores: [1,0,0,3] }
+    ]
+  },
+  {
+    q: "그림 그리기 시간에 아이는 주로?",
+    scene: "🎨 자유 미술 활동 시간",
+    opts: [
+      { emoji: "🌈", text: "빠르게 여러 장을 그리며 다양한 시도를 한다", scores: [3,0,0,1] },
+      { emoji: "🖌️", text: "한 장을 오래 집중해서 섬세하게 그린다", scores: [0,2,0,2] },
+      { emoji: "🌳", text: "자연 풍경이나 동물을 자주 그린다", scores: [0,0,3,0] },
+      { emoji: "📐", text: "글자, 숫자, 도형 등을 그리거나 묻는다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "산책 중 강아지를 만났을 때?",
+    scene: "🐕 길에서 모르는 강아지와 마주친 상황",
+    opts: [
+      { emoji: "🤩", text: "신나서 바로 만져보려고 다가간다", scores: [3,0,1,0] },
+      { emoji: "😟", text: "무서워하며 뒤로 숨는다", scores: [0,3,0,0] },
+      { emoji: "🐾", text: "조심스럽게 다가가서 관찰한다", scores: [0,1,3,0] },
+      { emoji: "❓", text: "\"이 강아지 이름은 뭐야? 몇 살이야?\" 질문한다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "새로운 음식이 나왔을 때 아이는?",
+    scene: "🍽️ 처음 보는 음식이 식탁에 놓인 상황",
+    opts: [
+      { emoji: "😋", text: "일단 먹어본다!", scores: [3,0,0,0] },
+      { emoji: "🙅", text: "익숙한 것만 먹고 새 음식은 거부한다", scores: [0,3,0,0] },
+      { emoji: "👃", text: "냄새 맡고, 만져보고, 천천히 시도한다", scores: [0,0,3,0] },
+      { emoji: "🔍", text: "\"이건 뭐로 만든 거야?\" 재료를 궁금해한다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "블록 놀이를 할 때 아이의 스타일은?",
+    scene: "🧱 레고나 블록이 있는 놀이 시간",
+    opts: [
+      { emoji: "💥", text: "높이 쌓고 무너뜨리는 걸 반복한다", scores: [3,0,0,0] },
+      { emoji: "🏠", text: "설명서대로 차근차근 따라 만든다", scores: [0,2,0,2] },
+      { emoji: "🌺", text: "동물원이나 정원 같은 자연 테마를 만든다", scores: [0,0,3,0] },
+      { emoji: "🏗️", text: "독창적인 구조물을 만들고 이름을 붙인다", scores: [1,0,0,3] }
+    ]
+  },
+  {
+    q: "낯선 어른이 말을 걸면?",
+    scene: "👋 마트에서 모르는 어른이 인사하는 상황",
+    opts: [
+      { emoji: "😄", text: "밝게 인사하고 자기 이야기를 한다", scores: [3,0,0,1] },
+      { emoji: "😶", text: "엄마 뒤에 숨거나 대답을 안 한다", scores: [0,3,0,0] },
+      { emoji: "🙂", text: "가볍게 인사하고 주변 환경에 관심을 돌린다", scores: [0,0,3,0] },
+      { emoji: "🤔", text: "잠시 관찰하다가 궁금한 걸 물어본다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "비 오는 날 아이의 반응은?",
+    scene: "🌧️ 아침에 일어났는데 비가 오는 날",
+    opts: [
+      { emoji: "☔", text: "\"밖에 나가자! 물웅덩이!\" 신난다", scores: [3,0,1,0] },
+      { emoji: "😣", text: "밖에 못 나간다고 속상해하며 안정이 필요하다", scores: [0,3,0,0] },
+      { emoji: "🐌", text: "창밖을 보며 빗소리 듣고 달팽이를 찾는다", scores: [0,0,3,0] },
+      { emoji: "📚", text: "\"비는 왜 와?\" 과학적 질문을 한다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "동화책 읽기 시간에 아이는?",
+    scene: "📖 잠자기 전 책 읽기 시간",
+    opts: [
+      { emoji: "⏩", text: "빨리 넘기며 여러 권을 보고 싶어한다", scores: [3,0,0,0] },
+      { emoji: "🫂", text: "좋아하는 한 권을 반복해서 읽어달라고 한다", scores: [0,3,0,0] },
+      { emoji: "🦋", text: "자연·동물 관련 책을 특히 좋아한다", scores: [0,0,3,0] },
+      { emoji: "💡", text: "\"그 다음엔 어떻게 돼?\" 이야기를 예측한다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "단체 활동(율동, 체조)에서 아이는?",
+    scene: "🎵 선생님과 함께하는 단체 활동 시간",
+    opts: [
+      { emoji: "🕺", text: "앞에 나가서 신나게 참여한다", scores: [3,0,0,0] },
+      { emoji: "👀", text: "뒤쪽에서 조용히 따라하거나 구경한다", scores: [0,3,0,0] },
+      { emoji: "🎶", text: "즐기지만 자기만의 동작을 추가한다", scores: [1,0,2,1] },
+      { emoji: "📝", text: "동작 순서를 빨리 외우고 다른 친구를 도와준다", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "주말에 아이가 가장 하고 싶어하는 것은?",
+    scene: "🌤️ 토요일 아침, 뭘 할지 정하는 시간",
+    opts: [
+      { emoji: "🎢", text: "놀이공원이나 키즈카페 같은 활동적인 곳", scores: [3,0,0,0] },
+      { emoji: "🏡", text: "집에서 편하게 놀기", scores: [0,3,0,0] },
+      { emoji: "⛰️", text: "공원, 산, 계곡 등 자연 속 나들이", scores: [0,0,3,0] },
+      { emoji: "🏛️", text: "과학관, 박물관, 도서관 방문", scores: [0,0,0,3] }
+    ]
+  },
+  {
+    q: "아이가 속상할 때 주로 어떻게 하나요?",
+    scene: "😥 기분이 안 좋은 상황에서의 아이 모습",
+    opts: [
+      { emoji: "😤", text: "크게 울거나 화를 표현하고 금방 풀린다", scores: [3,0,0,0] },
+      { emoji: "🥺", text: "오래 속상해하며 안아주면 천천히 진정된다", scores: [0,3,0,0] },
+      { emoji: "🌱", text: "혼자 조용한 곳에서 마음을 추스른다", scores: [0,1,3,0] },
+      { emoji: "🗨️", text: "왜 속상한지 말로 설명하려고 한다", scores: [0,0,0,3] }
+    ]
+  }
+];
+
+const typeInfo = [
+  {
+    name: "활동적이고 호기심이 많은 아이",
+    tag: "🔥 탐험가형",
+    color: "#FF6B35",
+    gradient: "linear-gradient(135deg, #FF6B35, #FF8C42)",
+    emoji: "🚀",
+    desc: "에너지가 넘치고 새로운 것에 대한 도전을 두려워하지 않는 타입이에요. 다양한 경험을 통해 성장하며, 움직이면서 배우는 것을 좋아합니다.",
+    recs: [
+      { icon: "🔬", text: "탐구/체험형 프로그램이 풍부한 기관" },
+      { icon: "🏃", text: "실외 활동이 많고 체육 프로그램이 다양한 곳" },
+      { icon: "🎭", text: "프로젝트 기반 학습이나 주제 탐구 활동이 있는 곳" },
+      { icon: "⚠️", text: "주의: 지나치게 정적인 환경은 아이에게 스트레스가 될 수 있어요" }
+    ]
+  },
+  {
+    name: "예민하거나 소극적인 아이",
+    tag: "💜 감성형",
+    color: "#7B68EE",
+    gradient: "linear-gradient(135deg, #7B68EE, #9B8FFF)",
+    emoji: "🌙",
+    desc: "감수성이 풍부하고 세심한 관찰력을 가진 타입이에요. 안정적인 환경에서 자신감이 생기면 놀라운 집중력과 깊이를 보여줍니다.",
+    recs: [
+      { icon: "🤗", text: "정서 안정과 개별 배려를 중요시하는 기관" },
+      { icon: "👩‍🏫", text: "교사 대 아동 비율이 낮은 소규모 학급" },
+      { icon: "🏠", text: "가정적이고 따뜻한 분위기의 어린이집" },
+      { icon: "⚠️", text: "주의: 경쟁적이거나 소음이 많은 환경은 피해주세요" }
+    ]
+  },
+  {
+    name: "자연을 좋아하는 아이",
+    tag: "🌿 자연인형",
+    color: "#2ECC71",
+    gradient: "linear-gradient(135deg, #27AE60, #2ECC71)",
+    emoji: "🦋",
+    desc: "자연 속에서 편안함을 느끼고 생명에 대한 관심이 높은 타입이에요. 오감을 활용한 체험을 통해 가장 효과적으로 학습합니다.",
+    recs: [
+      { icon: "🌳", text: "숲 체험, 텃밭, 바깥 활동이 풍부한 기관" },
+      { icon: "🏕️", text: "자연친화적 교육(숲유치원, 생태교육 등)을 하는 곳" },
+      { icon: "🐰", text: "동식물 관찰, 계절 활동이 교육과정에 포함된 곳" },
+      { icon: "⚠️", text: "주의: 실내 위주의 학습 중심 기관은 아이가 답답해할 수 있어요" }
+    ]
+  },
+  {
+    name: "학습의 욕구가 큰 아이",
+    tag: "📘 탐구형",
+    color: "#3498DB",
+    gradient: "linear-gradient(135deg, #2980B9, #3498DB)",
+    emoji: "🎓",
+    desc: "\"왜?\"를 많이 묻고 알아가는 과정 자체를 즐기는 타입이에요. 체계적인 프로그램 속에서 지적 호기심이 무럭무럭 자랍니다.",
+    recs: [
+      { icon: "📚", text: "학습 프로그램이 탄탄한 기관" },
+      { icon: "🧪", text: "과학, 수학, 언어 등 다양한 영역의 교육이 있는 곳" },
+      { icon: "🎯", text: "개별 수준에 맞춘 심화 학습이 가능한 곳" },
+      { icon: "⚠️", text: "주의: 학습 강요가 아닌 호기심 기반의 자기주도적 학습 환경이 좋아요" }
+    ]
+  }
+];
+
+let childName = "";
+let currentQ = 0;
+let scores = [0, 0, 0, 0]; // type1~4
+let answerHistory = []; // stores { qIndex, optIndex } for each answered question
+
+function startTest() {
+  childName = document.getElementById("childName").value.trim() || "우리 아이";
+  answerHistory = [];
+  scores = [0, 0, 0, 0];
+  currentQ = 0;
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  showQuestion();
+}
+
+function updateDots() {
+  const container = document.getElementById("dotIndicator");
+  container.innerHTML = questions.map((_, i) => {
+    let cls = "answered-dot";
+    if (i === currentQ) cls += " current";
+    else if (i < answerHistory.length) cls += " filled";
+    return `<span class="${cls}"></span>`;
+  }).join("");
+}
+
+function showQuestion() {
+  const q = questions[currentQ];
+  const pct = Math.round((currentQ / questions.length) * 100);
+  document.getElementById("progressLabel").textContent = `질문 ${currentQ + 1} / ${questions.length}`;
+  document.getElementById("progressPct").textContent = pct + "%";
+  document.getElementById("progressFill").style.width = pct + "%";
+
+  // Back button state
+  document.getElementById("backBtn").disabled = currentQ === 0;
+
+  // Dot indicator
+  updateDots();
+
+  // Check if this question was previously answered
+  const prevAnswer = answerHistory.find(h => h.qIndex === currentQ);
+
+  const card = document.getElementById("questionCard");
+  card.style.animation = "none";
+  card.offsetHeight; // reflow
+  card.style.animation = "slideUp 0.45s ease";
+
+  card.innerHTML = `
+    <span class="q-number">Q${currentQ + 1}</span>
+    <div class="q-text">${q.q}</div>
+    <div class="q-scene">${q.scene}</div>
+    <div class="options">
+      ${q.opts.map((o, i) => `
+        <button class="option-btn${prevAnswer && prevAnswer.optIndex === i ? ' selected' : ''}" onclick="selectAnswer(${i})">
+          <span class="opt-emoji">${o.emoji}</span>
+          <span>${o.text}</span>
+        </button>
+      `).join("")}
+    </div>
+  `;
+}
+
+function selectAnswer(idx) {
+  // If re-answering a previous question, remove old answer's scores
+  const existingIdx = answerHistory.findIndex(h => h.qIndex === currentQ);
+  if (existingIdx !== -1) {
+    const oldOpt = answerHistory[existingIdx].optIndex;
+    const oldScores = questions[currentQ].opts[oldOpt].scores;
+    scores = scores.map((v, i) => v - oldScores[i]);
+    // Remove this and all subsequent answers (re-branching)
+    const removed = answerHistory.splice(existingIdx);
+    removed.forEach(h => {
+      if (h.qIndex !== currentQ) {
+        const s = questions[h.qIndex].opts[h.optIndex].scores;
+        scores = scores.map((v, i) => v - s[i]);
+      }
+    });
+  }
+
+  // Add new answer
+  const s = questions[currentQ].opts[idx].scores;
+  scores = scores.map((v, i) => v + s[i]);
+  answerHistory.push({ qIndex: currentQ, optIndex: idx });
+
+  const btns = document.querySelectorAll(".option-btn");
+  btns.forEach(b => b.style.pointerEvents = "none");
+  btns[idx].classList.add("selected");
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }, 400);
+}
+
+function goBack() {
+  if (currentQ === 0) return;
+  currentQ--;
+  showQuestion();
+}
+
+function showResult() {
+  document.getElementById("quiz").classList.add("hidden");
+  const resultDiv = document.getElementById("result");
+  resultDiv.classList.remove("hidden");
+
+  const maxScore = Math.max(...scores);
+  const topIdx = scores.indexOf(maxScore);
+  const total = scores.reduce((a, b) => a + b, 0);
+  const t = typeInfo[topIdx];
+
+  // Secondary type
+  const sortedIdxs = [...scores.keys()].sort((a, b) => scores[b] - scores[a]);
+  const secondIdx = sortedIdxs[1];
+  const secondType = typeInfo[secondIdx];
+  const hasSecond = scores[secondIdx] >= maxScore * 0.7;
+
+  resultDiv.innerHTML = `
+    <div class="result-wrap">
+      <div class="result-card">
+        <div class="result-banner" style="background:${t.gradient}">
+          <div class="r-emoji">${t.emoji}</div>
+          <h2>${childName}은(는) ${t.tag}</h2>
+          <p>${t.name}</p>
+        </div>
+        <div class="result-body">
+          <h3>💡 이런 성향이에요</h3>
+          <p>${t.desc}</p>
+          ${hasSecond ? `<p style="background:#f8f6f3;padding:12px 14px;border-radius:12px;"><strong>${secondType.tag}</strong> 성향도 함께 가지고 있어요! 두 가지 특성을 모두 고려해서 기관을 선택하면 좋겠어요.</p>` : ""}
+          <h3 style="margin-top:20px">🏫 이런 기관을 찾아보세요</h3>
+          <ul class="rec-list">
+            ${t.recs.map(r => `<li><span class="li-icon">${r.icon}</span> ${r.text}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+
+      <div class="score-section">
+        <h3>📊 ${childName}의 유형별 성향 분석</h3>
+        ${typeInfo.map((tp, i) => {
+          const pct = total > 0 ? Math.round((scores[i] / total) * 100) : 0;
+          return `
+            <div class="score-row">
+              <div class="score-label">
+                <span>${tp.tag} ${tp.name}</span>
+                <span style="color:${tp.color};font-weight:700">${pct}%</span>
+              </div>
+              <div class="score-bar-bg">
+                <div class="score-bar-fill" style="width:0%;background:${tp.gradient}" data-target="${pct}"></div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <button class="restart-btn" onclick="restart()">🔄 다시 테스트하기</button>
+    </div>
+  `;
+
+  // Animate score bars
+  setTimeout(() => {
+    document.querySelectorAll(".score-bar-fill").forEach(bar => {
+      bar.style.width = bar.dataset.target + "%";
+    });
+  }, 200);
+}
+
+function restart() {
+  currentQ = 0;
+  scores = [0, 0, 0, 0];
+  answerHistory = [];
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("result").innerHTML = "";
+  document.getElementById("intro").classList.remove("hidden");
+}
+
+// Enter key to start
+document.getElementById("childName").addEventListener("keydown", e => {
+  if (e.key === "Enter") startTest();
+});
+</script>
+</body>
+</html>
